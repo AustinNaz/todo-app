@@ -27,7 +27,7 @@ function App() {
       <Stack spacing={2}>
         {todoState.length
           ? todoState.map((todo, i) => (
-              <TodoComponent key={todo.todoName + i} todo={todo} />
+              <TodoComponent key={todo.todoName + i} todo={todo} index={i} />
             ))
           : null}
       </Stack>

@@ -1,27 +1,62 @@
 import * as React from "react";
 import { useForm, SubmitHandler, DefaultValues } from "react-hook-form";
-import { Stack } from "@mui/material";
+import { Stack, Button } from "@mui/material";
 
 import TodoComponent from "Components/Todo";
-import { TextField } from "Components/Form";
+import { TextField, CheckBox } from "Components/Form";
+import ResponsiveAppBar from "Components/AppBar";
 import { useTodoState } from "Hooks/useGlobalState";
-import { Todo } from "Types";
+import { CreateTodo, Todo } from "Types";
 import "./App.css";
 
 function App() {
   const { todoState, addTodo } = useTodoState();
 
-  const defaultValues: DefaultValues<Todo> = {
+  const defaultValues: DefaultValues<CreateTodo> = {
     todoName: "",
+    started: false,
   };
-  const { handleSubmit, control } = useForm<Todo>({ defaultValues });
-  const onSubmit: SubmitHandler<Todo> = (todo) => addTodo(todo);
+  const { handleSubmit, control } = useForm<CreateTodo>({ defaultValues });
+  const onSubmit: SubmitHandler<CreateTodo> = (todo) => {
+    const newTodo: Todo = {
+      todoName: todo.todoName,
+      status: {
+        notStarted: {
+          date: todo.started ? undefined : new Date(),
+        },
+        started: {
+          date: todo.started ? new Date() : undefined,
+        },
+      },
+    };
 
+    console.log({ newTodo });
+  };
+
+  const styles = {
+    form: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    submitButton: {
+      height: "20%",
+    },
+  };
   return (
     <div className="App">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField name="todoName" control={control} />
-        <input type="submit" />
+      <ResponsiveAppBar />
+      <form style={styles.form} onSubmit={handleSubmit(onSubmit)}>
+        <TextField fieldName="todoName" label="New Todo" control={control} />
+        <CheckBox
+          fieldName="started"
+          label="Started?"
+          control={control}
+          labelPlacement={"start"}
+        />
+        <Button variant="outlined" type="submit">
+          Submit
+        </Button>
       </form>
 
       <Stack spacing={2}>

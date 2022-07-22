@@ -24,7 +24,7 @@ const TodoComponent: React.FC<Props> = ({ todo: { todoName }, index }) => {
       <CardContent>
         {edit ? (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField name="todoName" control={control} />
+            <TextField fieldName="todoName" label="Edit Todo" control={control} />
             <input type="submit" />
           </form>
         ) : (

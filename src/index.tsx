@@ -5,10 +5,16 @@ import App from "./App";
 import { ThemeProvider } from "@mui/material/styles";
 import { RecoilRoot } from "recoil";
 import { lightTheme } from "./Theme";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import firebaseConfig from "Utils/Firebase";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // Add Recoil in here to change themes
 root.render(

@@ -1,14 +1,19 @@
 import * as React from "react";
 
 import { Controller, ControllerProps, Control } from "react-hook-form";
-import { TextField as MUITextField, TextFieldProps } from "@mui/material";
+import {
+  Checkbox,
+  CheckboxProps,
+  FormControlLabel,
+} from "@mui/material";
 
 type Props = {
   fieldName: string;
-  label: string
+  label: string;
   control: Control<any, any>;
   controllerProps?: ControllerProps;
-  textFieldProps?: TextFieldProps;
+  CheckboxProps?: CheckboxProps;
+  labelPlacement?: "end" | "start" | "top" | "bottom"
 };
 
 const styles = {
@@ -17,24 +22,25 @@ const styles = {
   },
 };
 
-const TextField: React.FC<Props> = ({
+const CheckBox: React.FC<Props> = ({
   fieldName,
-  label,
   control,
-  textFieldProps,
+  label,
+  CheckboxProps,
   controllerProps,
+  labelPlacement,
 }) => {
   return (
     <Controller
       name={fieldName}
       {...controllerProps}
       render={({ field }) => (
-        <MUITextField
-          sx={styles.textField}
+        <FormControlLabel
           label={label}
-          variant="outlined"
-          {...textFieldProps}
-          {...field}
+          labelPlacement={labelPlacement}
+          control={
+            <Checkbox sx={styles.textField} {...CheckboxProps} {...field} />
+          }
         />
       )}
       control={control}
@@ -42,4 +48,4 @@ const TextField: React.FC<Props> = ({
   );
 };
 
-export default TextField;
+export default CheckBox;

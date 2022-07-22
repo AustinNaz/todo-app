@@ -26,3 +26,16 @@ export type Todo = {
 export type Auth = {
   isSignedIn: boolean
 }
+
+export type SignInFields = {
+  email: string
+  password: string
+}
+
+export type SignUpFields = {
+  secondPassword: string
+} & SignInFields
+
+export type VerificationFields = {
+  code: string
+}

@@ -1,24 +1,21 @@
 import * as React from "react";
 import { useForm, SubmitHandler, DefaultValues } from "react-hook-form";
+import { Stack } from "@mui/material";
 
+import TodoComponent from "Components/Todo";
 import { TextField } from "Components/Form";
+import { useTodoState } from "Hooks/useGlobalState";
 import { Todo } from "Types";
 import "./App.css";
 
 function App() {
-  const todoValues: DefaultValues<Todo> = {
+  const { todoState, addTodo } = useTodoState();
+
+  const defaultValues: DefaultValues<Todo> = {
     todoName: "",
   };
-
-  const [todoState, setTodoState] = React.useState<Todo>({ todoName: "" });
-
-  React.useEffect(() => {
-    console.log({ todoState });
-  }, [todoState]);
-  const { handleSubmit, control } = useForm<Todo>({
-    defaultValues: todoValues,
-  });
-  const onSubmit: SubmitHandler<Todo> = (data) => setTodoState(data);
+  const { handleSubmit, control } = useForm<Todo>({ defaultValues });
+  const onSubmit: SubmitHandler<Todo> = (todo) => addTodo(todo);
 
   return (
     <div className="App">
@@ -26,6 +23,14 @@ function App() {
         <TextField name="todoName" control={control} />
         <input type="submit" />
       </form>
+
+      <Stack spacing={2}>
+        {todoState.length
+          ? todoState.map((todo, i) => (
+              <TodoComponent key={todo.todoName + i} todo={todo} />
+            ))
+          : null}
+      </Stack>
     </div>
   );
 }

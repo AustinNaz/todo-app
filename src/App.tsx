@@ -5,19 +5,25 @@ import { Stack, Button } from "@mui/material";
 import TodoComponent from "Components/Todo";
 import { TextField, CheckBox } from "Components/Form";
 import ResponsiveAppBar from "Components/AppBar";
-import { useTodoState } from "Hooks/useGlobalState";
+import { useTodoState, useAuthState } from "Hooks/useGlobalState";
 import { CreateTodo, Todo } from "Types";
 import "./App.css";
 
 function App() {
   const { todoState, addTodo } = useTodoState();
+  const { checkIfSignedIn } = useAuthState();
+
+  React.useEffect(() => {
+    checkIfSignedIn();
+    console.log('runnin')
+  }, []);
 
   const defaultValues: DefaultValues<CreateTodo> = {
     todoName: "",
     started: false,
   };
   const { handleSubmit, control } = useForm<CreateTodo>({ defaultValues });
-  const onSubmit: SubmitHandler<CreateTodo> = (todo) => {
+  const onSubmit: SubmitHandler<CreateTodo> = async (todo) => {
     const newTodo: Todo = {
       todoName: todo.todoName,
       status: {
@@ -28,9 +34,10 @@ function App() {
           date: todo.started ? new Date() : undefined,
         },
       },
+      priority: "Normal",
     };
 
-    console.log({ newTodo });
+    await addTodo(newTodo);
   };
 
   const styles = {

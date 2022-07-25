@@ -19,12 +19,15 @@ export type Todo = {
       date?: Date
     };
   };
+  priority: "Normal" | "Urgent" | "Negligent" | "ASAP";
   dueBy?: Date
   addedBy?: string
+  pending?: boolean
 };
 
 export type Auth = {
   isSignedIn: boolean
+  idToken?: string
 }
 
 export type SignInFields = {

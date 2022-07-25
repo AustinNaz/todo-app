@@ -19,10 +19,10 @@ import AuthModal from "Components/AuthModal";
 import { useAuthState } from "Hooks/useGlobalState";
 
 const pages = ["Todos"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Account", "Dashboard"];
 
 const ResponsiveAppBar = () => {
-  const { authState } = useAuthState();
+  const { authState, signOutUser } = useAuthState();
   const [open, setOpen] = React.useState<boolean>(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -160,6 +160,9 @@ const ResponsiveAppBar = () => {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
+                <MenuItem key={"signOut"} onClick={() => signOutUser()}>
+                  <Typography textAlign="center">{"Signout"}</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           ) : (

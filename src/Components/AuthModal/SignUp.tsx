@@ -1,59 +1,34 @@
-import * as React from 'react'
+import * as React from "react";
 
-import VerificationForm from './VerifyForm'
-import SignUpForm from './SignUpForm'
-// import { useCognito } from 'Hooks'
-import { SignUpFields, VerificationFields } from 'Types'
+import SignUpForm from "./SignUpForm";
+import { useAuthState } from "Hooks/useGlobalState";
+import { SignUpFields } from "Types";
 
 type Props = {
-  setClose: () => void
-}
-
-type State = 'SignUp' | 'Verify'
+  setClose: () => void;
+};
 
 const SignUp: React.FC<Props> = ({ setClose }) => {
-  const [state, setState] = React.useState<State>('SignUp')
-  const [formState, setFormState] = React.useState<SignUpFields>()
-  const [veriState, setVeriState] = React.useState<VerificationFields>()
-  // const { Pool, verifyUser, signIn } = useCognito()
+  const [formState, setFormState] = React.useState<SignUpFields>();
+  const { signUpWithEmail } = useAuthState();
 
-  const verifyAndSignIn = async (email: string, password: string, code: string) => {
+  const signUpUser = async (email: string, password: string) => {
     try {
-      // const res = await verifyUser(email, password, code)
-      // console.log({ res })
-      // if (res !== 'SUCCESS') throw new Error('Could not verify user')
-
-      // const session = await signIn(email, password)
-      // console.log({ session })
-      setClose()
-    } catch (err) {
-      console.log(err)
+      await signUpWithEmail(email, password);
+    } catch (e) {
+      console.log(e);
     }
-  }
+  };
 
-  // React.useEffect(() => {
-  //   console.log({ formState })
-  //   if (!formState || !Pool) return
-  //   if (formState.password !== formState.secondPassword) return
+  React.useEffect(() => {
+    console.log({ formState });
+    if (!formState || !formState.email || !formState.password) return;
+    if (formState.password !== formState.secondPassword) return;
 
-  //   Pool.signUp(formState.email, formState.password, [], [], (err, res) => {
-  //     if (err) console.log(err)
-  //     console.log(res)
-  //     setState('Verify')
-  //   })
-  // }, [formState])
+    signUpUser(formState.email, formState.password);
+  }, [formState]);
 
-  // React.useEffect(() => {
-  //   if (!veriState || !formState) return
+  return <SignUpForm setState={setFormState} />;
+};
 
-  //   verifyAndSignIn(formState.email, formState.password, veriState.code)
-  // }, [veriState])
-
-  return state === 'SignUp' ? (
-    <SignUpForm setState={setFormState} />
-  ) : (
-    <VerificationForm setState={setVeriState} />
-  )
-}
-
-export default SignUp
+export default SignUp;

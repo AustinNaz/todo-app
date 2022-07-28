@@ -1,8 +1,4 @@
-import {
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -18,7 +14,7 @@ import { Todo } from "Types";
 export const useTodoState = () => {
   const [state, setState] = useRecoilState(todoState);
   const { isSignedIn } = useRecoilValue(authState);
-  const { get, post } = useAxios();
+  const { get, post, put, remove } = useAxios();
 
   const getTodo = async () => {
     if (!isSignedIn) return;
@@ -49,20 +45,53 @@ export const useTodoState = () => {
     }
   };
 
-  const editTodo = (newTodo: Todo, index: number) => {
+  const editTodo = async (
+    oldTodo: Todo,
+    newValues: Partial<Todo>,
+    index: number
+  ) => {
+    const newTodo: Todo = {
+      id: oldTodo.id,
+      todoName: newValues.todoName || oldTodo.todoName,
+      priority: newValues.priority || oldTodo.priority,
+      status: { ...oldTodo.status, ...newValues.status },
+      addedBy: newValues.addedBy || oldTodo.addedBy,
+      dueBy: newValues.dueBy || oldTodo.dueBy,
+      pending: newValues.pending || oldTodo.pending,
+    };
+
     setState((prev) => {
       const newState: Todo[] = JSON.parse(JSON.stringify(prev));
-      newState[index].todoName = newTodo.todoName;
+      newState[index] = newTodo;
       return newState;
     });
+
+    if (!isSignedIn) return;
+    try {
+      const res = await put("/todo", {
+        todo: newTodo,
+      });
+      console.log({ res });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const deleteTodo = (index: number) => {
+  const deleteTodo = async (todoId: string, index: number) => {
     setState((prev) => {
       const newState: Todo[] = JSON.parse(JSON.stringify(prev));
       newState.splice(index, 1);
       return newState;
     });
+
+    if (!isSignedIn) return;
+
+    try {
+      const res = await remove(`/todo/${todoId}`);
+      console.log({ res });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return { todoState: state, addTodo, editTodo, deleteTodo, getTodo };

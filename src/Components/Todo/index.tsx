@@ -9,31 +9,36 @@ import { useTodoState } from "Hooks/useGlobalState";
 
 type Props = { todo: Todo; index: number };
 
-const TodoComponent: React.FC<Props> = ({ todo: { todoName }, index }) => {
+const TodoComponent: React.FC<Props> = ({ todo, index }) => {
   const { editTodo, deleteTodo } = useTodoState();
   const [edit, setEdit] = React.useState<boolean>(false);
 
   const defaultValues: DefaultValues<Todo> = {
-    todoName,
+    todoName: todo.todoName,
   };
   const { handleSubmit, control } = useForm<Todo>({ defaultValues });
-  const onSubmit: SubmitHandler<Todo> = (todo) => editTodo(todo, index);
+  const onSubmit: SubmitHandler<Todo> = (newValues) =>
+    editTodo(todo, newValues, index);
 
   return (
     <Card>
       <CardContent>
         {edit ? (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TextField fieldName="todoName" label="Edit Todo" control={control} />
+            <TextField
+              fieldName="todoName"
+              label="Edit Todo"
+              control={control}
+            />
             <input type="submit" />
           </form>
         ) : (
-          <Typography>{todoName}</Typography>
+          <Typography>{todo.todoName}</Typography>
         )}
         <IconButton onClick={() => setEdit(true)}>
           <Edit />
         </IconButton>
-        <IconButton onClick={() => deleteTodo(index)}>
+        <IconButton onClick={() => deleteTodo(todo.id, index)}>
           <Delete />
         </IconButton>
       </CardContent>

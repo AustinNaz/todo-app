@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useForm, SubmitHandler, DefaultValues } from "react-hook-form";
 import { Stack, Button } from "@mui/material";
+import { v4 as uuidV4 } from 'uuid'
 
 import TodoComponent from "Components/Todo";
 import { TextField, CheckBox } from "Components/Form";
@@ -25,6 +26,7 @@ function App() {
   const { handleSubmit, control } = useForm<CreateTodo>({ defaultValues });
   const onSubmit: SubmitHandler<CreateTodo> = async (todo) => {
     const newTodo: Todo = {
+      id: uuidV4(),
       todoName: todo.todoName,
       status: {
         notStarted: {

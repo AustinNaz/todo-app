@@ -14,6 +14,17 @@ type AxiosPost = <T>(
   config?: AxiosRequestConfig
 ) => Promise<AxiosResponse<T>>;
 
+type AxiosPut = <T>(
+  url: string,
+  data: any,
+  config?: AxiosRequestConfig
+) => Promise<AxiosResponse<T>>;
+
+type AxiosDelete = <T>(
+  url: string,
+  config?: AxiosRequestConfig
+) => Promise<AxiosResponse<T>>;
+
 const useAxios = () => {
   const { idToken } = useRecoilValue(authState);
   axios.defaults.baseURL = process.env.REACT_APP_BACKEND_API;
@@ -34,7 +45,23 @@ const useAxios = () => {
       ...config,
     });
 
-  return { get, post };
+  const put: AxiosPut = (url, data, config?) =>
+    axios.put(url, data, {
+      headers: {
+        authorization: `Bearer ${idToken || " "}`,
+      },
+      ...config,
+    });
+
+  const remove: AxiosDelete = (url, config?) =>
+    axios.delete(url, {
+      headers: {
+        authorization: `Bearer ${idToken || " "}`,
+      },
+      ...config,
+    });
+
+  return { get, post, put, remove };
 };
 
 export default useAxios;

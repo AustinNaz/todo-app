@@ -1,5 +1,5 @@
 enum status {
-  notStarted = 'notStarted',
+  notStarted = "notStarted",
   started = "started",
   inProgress = "inProgress",
   finished = "finished",
@@ -8,37 +8,38 @@ enum status {
 }
 
 export type CreateTodo = {
-  todoName: string
-  started?: boolean
-}
+  todoName: string;
+  started?: boolean;
+};
 
 export type Todo = {
+  id: string;
   todoName: string;
   status: {
     [keyof in status]?: {
-      date?: Date
+      date?: Date;
     };
   };
   priority: "Normal" | "Urgent" | "Negligent" | "ASAP";
-  dueBy?: Date
-  addedBy?: string
-  pending?: boolean
+  dueBy?: Date;
+  addedBy?: string;
+  pending?: boolean;
 };
 
 export type Auth = {
-  isSignedIn: boolean
-  idToken?: string
-}
+  isSignedIn: boolean;
+  idToken?: string;
+};
 
 export type SignInFields = {
-  email: string
-  password: string
-}
+  email: string;
+  password: string;
+};
 
 export type SignUpFields = {
-  secondPassword: string
-} & SignInFields
+  secondPassword: string;
+} & SignInFields;
 
 export type VerificationFields = {
-  code: string
-}
+  code: string;
+};

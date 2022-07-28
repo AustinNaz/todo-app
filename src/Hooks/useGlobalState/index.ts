@@ -94,13 +94,24 @@ export const useTodoState = () => {
     }
   };
 
-  return { todoState: state, addTodo, editTodo, deleteTodo, getTodo };
+  const sendTodo = async (todo: Todo, receiverEmail: string) => {
+    if (!isSignedIn) return;
+
+    try {
+      const res = await post(`/todo/user/${receiverEmail}`, { todo });
+      console.log({ res });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return { todoState: state, addTodo, editTodo, deleteTodo, getTodo, sendTodo };
 };
 
 export const useAuthState = () => {
   const [state, setState] = useRecoilState(authState);
   const todoSetState = useSetRecoilState(todoState);
-  const { get } = useAxios();
+  const { get, post } = useAxios();
 
   const checkIfSignedIn = async () => {
     const auth = getAuth();
@@ -132,6 +143,13 @@ export const useAuthState = () => {
 
       await createUserWithEmailAndPassword(auth, email, password);
       const idToken = await getAuth().currentUser?.getIdToken(true);
+      await post(
+        "/user",
+        {},
+        {
+          headers: { authorization: `Bearer: ${idToken}` },
+        }
+      );
       setState({ isSignedIn: true, idToken });
     } catch (e) {
       console.log(e);

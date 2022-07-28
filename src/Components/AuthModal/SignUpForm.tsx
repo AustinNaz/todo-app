@@ -16,10 +16,16 @@ const SignUpForm: React.FC<Props> = ({ setState }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField fieldName="email" label="Email" control={control} />
-      <TextField fieldName="password" label="Password" control={control} />
+      <TextField
+        fieldName="password"
+        label="Password"
+        textFieldProps={{ type: "password" }}
+        control={control}
+      />
       <TextField
         fieldName="secondPassword"
         label="Re-Enter Password"
+        textFieldProps={{ type: "password" }}
         control={control}
       />
       <input type="submit" />

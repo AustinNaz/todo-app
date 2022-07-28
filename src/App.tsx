@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useForm, SubmitHandler, DefaultValues } from "react-hook-form";
 import { Stack, Button } from "@mui/material";
-import { v4 as uuidV4 } from 'uuid'
+import { v4 as uuidV4 } from "uuid";
 
 import TodoComponent from "Components/Todo";
 import { TextField, CheckBox } from "Components/Form";
@@ -11,16 +11,17 @@ import { CreateTodo, Todo } from "Types";
 import "./App.css";
 
 function App() {
-  const { todoState, addTodo } = useTodoState();
+  const { todoState, addTodo, sendTodo } = useTodoState();
   const { checkIfSignedIn } = useAuthState();
 
   React.useEffect(() => {
     checkIfSignedIn();
-    console.log('runnin')
+    console.log("runnin");
   }, []);
 
   const defaultValues: DefaultValues<CreateTodo> = {
     todoName: "",
+    receiver: "",
     started: false,
   };
   const { handleSubmit, control } = useForm<CreateTodo>({ defaultValues });
@@ -39,7 +40,8 @@ function App() {
       priority: "Normal",
     };
 
-    await addTodo(newTodo);
+    if (todo.receiver) await sendTodo(newTodo, todo.receiver);
+    else await addTodo(newTodo);
   };
 
   const styles = {
@@ -57,6 +59,11 @@ function App() {
       <ResponsiveAppBar />
       <form style={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <TextField fieldName="todoName" label="New Todo" control={control} />
+        <TextField
+          fieldName="receiver"
+          label="Send to user"
+          control={control}
+        />
         <CheckBox
           fieldName="started"
           label="Started?"

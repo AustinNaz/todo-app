@@ -9,6 +9,7 @@ enum status {
 
 export type CreateTodo = {
   todoName: string;
+  receiver?: string;
   started?: boolean;
 };
 

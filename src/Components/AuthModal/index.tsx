@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react";
 
 import {
   Grid,
@@ -7,35 +7,50 @@ import {
   DialogTitle,
   Typography,
   Tabs,
-  Tab
-} from '@mui/material'
+  Tab,
+  IconButton,
+} from "@mui/material";
 
-import TabPanel from 'Components/TabPanel'
-import SignIn from './SignIn'
-import SignUp from './SignUp'
+import TabPanel from "Components/TabPanel";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import { Close } from "@mui/icons-material";
 
 type Props = {
-  setClose: () => void
-} & DialogProps
-type State = 'SignUp' | 'SignIn'
+  setClose: () => void;
+} & DialogProps;
+type State = "SignUp" | "SignIn";
 
 const SignInUp: React.FC<Props> = ({ setClose, ...dialogProps }) => {
-  const [state, setState] = React.useState<State>('SignUp')
-  const [value, setValue] = React.useState<number>(0)
+  const [state, setState] = React.useState<State>("SignUp");
+  const [value, setValue] = React.useState<number>(0);
 
   const handleChange = (event: any, newValue: number) => {
-    setValue(newValue)
-    setState(newValue === 0 ? 'SignUp' : 'SignIn')
-  }
+    setValue(newValue);
+    setState(newValue === 0 ? "SignUp" : "SignIn");
+  };
+
+  const styles = {
+    closeIcon: {
+      float: "right",
+    },
+  };
 
   return (
-    <Dialog {...dialogProps}>
+    <Dialog {...dialogProps} onClose={setClose}>
       <DialogTitle>
-        <Tabs value={value} onChange={handleChange} aria-label='simple tabs example'>
-          <Tab label='Sign Up' />
-          <Tab label='Sign In' />
+        <IconButton sx={styles.closeIcon} onClick={setClose}>
+          <Close />
+        </IconButton>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="simple tabs example"
+        >
+          <Tab label="Sign Up" />
+          <Tab label="Sign In" />
         </Tabs>
-        <Typography variant='h3'>{state}</Typography>
+        <Typography variant="h3">{state}</Typography>
       </DialogTitle>
       <Grid container>
         <TabPanel value={value} index={0}>
@@ -46,7 +61,7 @@ const SignInUp: React.FC<Props> = ({ setClose, ...dialogProps }) => {
         </TabPanel>
       </Grid>
     </Dialog>
-  )
-}
+  );
+};
 
-export default SignInUp
+export default SignInUp;

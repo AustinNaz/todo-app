@@ -1,80 +1,33 @@
 import * as React from "react";
-import { useForm, SubmitHandler, DefaultValues } from "react-hook-form";
-import { Stack, Button } from "@mui/material";
-import { v4 as uuidV4 } from "uuid";
+import { Stack, Fab } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 import TodoComponent from "Components/Todo";
-import { TextField, CheckBox } from "Components/Form";
 import ResponsiveAppBar from "Components/AppBar";
 import { useTodoState, useAuthState } from "Hooks/useGlobalState";
-import { CreateTodo, Todo } from "Types";
+import TodoModal from "Components/TodoModal";
 import "./App.css";
 
 function App() {
-  const { todoState, addTodo, sendTodo } = useTodoState();
+  const { todoState } = useTodoState();
   const { checkIfSignedIn } = useAuthState();
+  const [open, setOpen] = React.useState<boolean>(false);
 
+  // Cant figure out how to get rid of eslint dep issue
   React.useEffect(() => {
     checkIfSignedIn();
-    console.log("runnin");
-  }, []);
-
-  const defaultValues: DefaultValues<CreateTodo> = {
-    todoName: "",
-    receiver: "",
-    started: false,
-  };
-  const { handleSubmit, control } = useForm<CreateTodo>({ defaultValues });
-  const onSubmit: SubmitHandler<CreateTodo> = async (todo) => {
-    const newTodo: Todo = {
-      id: uuidV4(),
-      todoName: todo.todoName,
-      status: {
-        notStarted: {
-          date: todo.started ? undefined : new Date(),
-        },
-        started: {
-          date: todo.started ? new Date() : undefined,
-        },
-      },
-      priority: "Normal",
-    };
-
-    if (todo.receiver) await sendTodo(newTodo, todo.receiver);
-    else await addTodo(newTodo);
-  };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const styles = {
-    form: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    submitButton: {
-      height: "20%",
+    fab: {
+      position: "fixed",
+      bottom: "1em",
+      right: "1em",
     },
   };
   return (
     <div className="App">
       <ResponsiveAppBar />
-      <form style={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <TextField fieldName="todoName" label="New Todo" control={control} />
-        <TextField
-          fieldName="receiver"
-          label="Send to user"
-          control={control}
-        />
-        <CheckBox
-          fieldName="started"
-          label="Started?"
-          control={control}
-          labelPlacement={"start"}
-        />
-        <Button variant="outlined" type="submit">
-          Submit
-        </Button>
-      </form>
-
       <Stack spacing={2}>
         {todoState.length
           ? todoState.map((todo, i) => (
@@ -82,6 +35,20 @@ function App() {
             ))
           : null}
       </Stack>
+      <Fab
+        sx={styles.fab}
+        color="primary"
+        aria-label="add"
+        onClick={() => setOpen(true)}
+      >
+        <Add />
+      </Fab>
+      <TodoModal
+        open={open}
+        setClose={() => setOpen(false)}
+        fullWidth={true}
+        maxWidth={"xs"}
+      />
     </div>
   );
 }

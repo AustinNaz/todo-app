@@ -31,7 +31,8 @@ const SignIn: React.FC<Props> = ({ setClose }) => {
       <TextField
         fieldName="password"
         label="Password"
-        textFieldProps={{ type: "password" }}
+        // textFieldProps={{ type: "password" }}
+        type="password"
         control={control}
       />
       <input type="submit" />

@@ -139,6 +139,7 @@ export const useAuthState = () => {
 
   const signUpWithEmail = async (email: string, password: string) => {
     try {
+      console.log('Rdaofhosadif')
       const auth = getAuth();
 
       await createUserWithEmailAndPassword(auth, email, password);

@@ -1,28 +1,17 @@
 import * as React from "react";
 
-import { Controller, ControllerProps, Control } from "react-hook-form";
-import { TextField as MUITextField, TextFieldProps } from "@mui/material";
+import { Controller } from "react-hook-form";
+import { TextField as MUITextField } from "@mui/material";
 
-type Props = {
-  fieldName: string;
-  label: string
-  control: Control<any, any>;
-  controllerProps?: ControllerProps;
-  textFieldProps?: TextFieldProps;
-};
+import gridWrapper from "Utils/GridWrapper";
+import { FormTextFieldProps } from "Types";
 
-const styles = {
-  textField: {
-    margin: "0.5rem",
-  },
-};
-
-const TextField: React.FC<Props> = ({
+const FormTextField: React.FC<FormTextFieldProps> = ({
   fieldName,
   label,
   control,
-  textFieldProps,
   controllerProps,
+  ...textFieldProps
 }) => {
   return (
     <Controller
@@ -30,7 +19,6 @@ const TextField: React.FC<Props> = ({
       {...controllerProps}
       render={({ field }) => (
         <MUITextField
-          sx={styles.textField}
           label={label}
           variant="outlined"
           {...textFieldProps}
@@ -41,5 +29,23 @@ const TextField: React.FC<Props> = ({
     />
   );
 };
+
+export const TextField = ({
+  disableGrid,
+  disableSpacer,
+  gridProps,
+  spacerProps,
+  ...props
+}: FormTextFieldProps) => {
+  return gridWrapper<FormTextFieldProps>({
+    disableGrid,
+    disableSpacer,
+    Component: FormTextField,
+    props,
+    gridProps,
+    spacerProps,
+    key: props.fieldName
+  })
+}
 
 export default TextField;

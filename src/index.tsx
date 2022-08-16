@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { ThemeProvider } from "@mui/material/styles";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { RecoilRoot } from "recoil";
 import { lightTheme } from "./Theme";
 import { initializeApp } from "firebase/app";
@@ -19,9 +21,11 @@ initializeApp(firebaseConfig);
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={lightTheme}>
-      <RecoilRoot>
-        <App />
-      </RecoilRoot>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <RecoilRoot>
+          <App />
+        </RecoilRoot>
+      </LocalizationProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

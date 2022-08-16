@@ -1,34 +1,18 @@
 import * as React from "react";
 
-import { Controller, ControllerProps, Control } from "react-hook-form";
-import {
-  Checkbox,
-  CheckboxProps,
-  FormControlLabel,
-} from "@mui/material";
+import { Controller } from "react-hook-form";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
-type Props = {
-  fieldName: string;
-  label: string;
-  control: Control<any, any>;
-  controllerProps?: ControllerProps;
-  CheckboxProps?: CheckboxProps;
-  labelPlacement?: "end" | "start" | "top" | "bottom"
-};
+import gridWrapper from "Utils/GridWrapper";
+import { FormCheckboxProps } from "Types";
 
-const styles = {
-  textField: {
-    margin: "0.5rem",
-  },
-};
-
-const CheckBox: React.FC<Props> = ({
+const FormCheckBox: React.FC<FormCheckboxProps> = ({
   fieldName,
   control,
   label,
-  CheckboxProps,
   controllerProps,
   labelPlacement,
+  ...checkboxProps
 }) => {
   return (
     <Controller
@@ -38,14 +22,31 @@ const CheckBox: React.FC<Props> = ({
         <FormControlLabel
           label={label}
           labelPlacement={labelPlacement}
-          control={
-            <Checkbox sx={styles.textField} {...CheckboxProps} {...field} />
-          }
+          control={<Checkbox {...checkboxProps} {...field} />}
         />
       )}
       control={control}
     />
   );
 };
+
+export const CheckBox = ({
+  disableGrid,
+  disableSpacer,
+  gridProps,
+  spacerProps,
+  ...props
+}: FormCheckboxProps) => {
+  return gridWrapper<FormCheckboxProps>({
+    disableGrid,
+    disableSpacer,
+    Component: FormCheckBox,
+    props,
+    gridProps,
+    spacerProps,
+    key: props.fieldName
+  })
+}
+
 
 export default CheckBox;

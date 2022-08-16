@@ -19,13 +19,13 @@ const SignUpForm: React.FC<Props> = ({ setState }) => {
       <TextField
         fieldName="password"
         label="Password"
-        textFieldProps={{ type: "password" }}
+        type='password'
         control={control}
       />
       <TextField
         fieldName="secondPassword"
         label="Re-Enter Password"
-        textFieldProps={{ type: "password" }}
+        type='password'
         control={control}
       />
       <input type="submit" />

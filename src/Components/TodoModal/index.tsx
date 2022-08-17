@@ -27,13 +27,17 @@ const TodoModal: React.FC<Props> = ({ setClose, ...dialogProps }) => {
 
   const defaultValues: DefaultValues<CreateTodo> = {
     todoName: "",
+    send: false,
     receiver: "",
     started: false,
     priority: "Normal",
     dueBy: new Date(),
   };
 
-  const { handleSubmit, control } = useForm<CreateTodo>({ defaultValues });
+  const { handleSubmit, control, watch } = useForm<CreateTodo>({
+    defaultValues,
+  });
+  const { send } = watch();
 
   const onSubmit: SubmitHandler<CreateTodo> = async (todo) => {
     const dueBy = dayjs(todo.dueBy).toDate();
@@ -56,14 +60,18 @@ const TodoModal: React.FC<Props> = ({ setClose, ...dialogProps }) => {
     console.log({ newTodo });
     if (todo.receiver) await sendTodo(newTodo, todo.receiver);
     else await addTodo(newTodo);
+    setClose();
   };
 
   const styles = {
     closeIcon: {
       float: "right",
     },
+    form: {
+      margin: "1em",
+    },
     submitButton: {
-      // height: "20%",
+      marginTop: "1em",
     },
   };
 
@@ -90,34 +98,46 @@ const TodoModal: React.FC<Props> = ({ setClose, ...dialogProps }) => {
         </IconButton>
         <Typography variant="h3">Create Todo</Typography>
       </DialogTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form style={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <Grid
           container
-          spacing={0.5}
-          flexDirection={"column"}
+          spacing={1}
+          // flexDirection={"column"}
           alignItems="center"
-          justifyContent={"center"}
+          justifyContent="center"
         >
           <TextField fieldName="todoName" label="New Todo" control={control} />
-          <TextField
-            fieldName="receiver"
-            label="Send to user"
-            control={control}
-          />
-          <CheckBox
-            fieldName="started"
-            label="Started?"
-            control={control}
-            labelPlacement={"start"}
-          />
+          <DateTimePicker fieldName="dueBy" control={control} label="Due By" />
           <Dropdown
             fieldName="priority"
             control={control}
             label="Priority"
             selectItems={priorityItems}
           />
-          <DateTimePicker fieldName="dueBy" control={control} label="Due By" />
-          <Button sx={styles.submitButton} variant="outlined" type="submit">
+          <CheckBox
+            fieldName="started"
+            label="Started?"
+            control={control}
+            labelPlacement="top"
+            gridProps={{ xs: 3 }}
+            disableSpacer
+          />
+          <CheckBox
+            fieldName="send"
+            label="Send todo to another User?"
+            control={control}
+            labelPlacement="top"
+            gridProps={{ xs: 7 }}
+            disableSpacer
+          />
+          {send ? (
+            <TextField
+              fieldName="receiver"
+              label="Enter Recipients Email"
+              control={control}
+            />
+          ) : null}
+          <Button sx={styles.submitButton} variant="contained" type="submit">
             Submit
           </Button>
         </Grid>

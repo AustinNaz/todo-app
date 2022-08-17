@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { TextField } from "Components/Form";
 import { useAuthState } from "Hooks/useGlobalState";
 import { SignInFields } from "Types";
+import { Grid } from "@mui/material";
 
 type Props = {
   setClose: () => void;
@@ -27,15 +28,23 @@ const SignIn: React.FC<Props> = ({ setClose }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <TextField fieldName="email" label="Email" control={control} />
-      <TextField
-        fieldName="password"
-        label="Password"
-        // textFieldProps={{ type: "password" }}
-        type="password"
-        control={control}
-      />
-      <input type="submit" />
+      <Grid
+        spacing={1}
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        container
+      >
+        <TextField fieldName="email" label="Email" control={control} />
+        <TextField
+          fieldName="password"
+          label="Password"
+          // textFieldProps={{ type: "password" }}
+          type="password"
+          control={control}
+        />
+        <input type="submit" />
+      </Grid>
     </form>
   );
 };

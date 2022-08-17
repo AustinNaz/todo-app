@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import {
-  Grid,
   Dialog,
   DialogProps,
   DialogTitle,
@@ -52,14 +51,12 @@ const SignInUp: React.FC<Props> = ({ setClose, ...dialogProps }) => {
         </Tabs>
         <Typography variant="h3">{state}</Typography>
       </DialogTitle>
-      <Grid container>
-        <TabPanel value={value} index={0}>
-          <SignUp setClose={setClose} />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <SignIn setClose={setClose} />
-        </TabPanel>
-      </Grid>
+      <TabPanel value={value} index={0}>
+        <SignUp setClose={setClose} />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <SignIn setClose={setClose} />
+      </TabPanel>
     </Dialog>
   );
 };

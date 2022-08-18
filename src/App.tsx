@@ -38,14 +38,14 @@ function App() {
             ))
           : null}
       </Stack> */}
-      <Fab
+      {/* <Fab
         sx={styles.fab}
         color="secondary"
         aria-label="add"
         onClick={() => setOpen(true)}
       >
         <Add />
-      </Fab>
+      </Fab> */}
       <TodoModal
         open={open}
         setClose={() => setOpen(false)}

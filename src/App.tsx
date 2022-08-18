@@ -19,7 +19,6 @@ function App() {
     checkIfSignedIn();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const newChanges = {}
   const styles = {
     fab: {
       position: "fixed",
@@ -40,7 +39,7 @@ function App() {
       </Stack> */}
       <Fab
         sx={styles.fab}
-        color="secondary"
+        color="primary"
         aria-label="add"
         onClick={() => setOpen(true)}
       >

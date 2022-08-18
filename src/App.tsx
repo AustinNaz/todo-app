@@ -6,6 +6,7 @@ import TodoComponent from "Components/Todo";
 import ResponsiveAppBar from "Components/AppBar";
 import { useTodoState, useAuthState } from "Hooks/useGlobalState";
 import TodoModal from "Components/TodoModal";
+import TodoDisplay from "Components/TodoDisplay";
 import "./App.css";
 
 function App() {
@@ -28,13 +29,14 @@ function App() {
   return (
     <div className="App">
       <ResponsiveAppBar />
-      <Stack spacing={2}>
+      <TodoDisplay />
+      {/* <Stack spacing={2}>
         {todoState.length
           ? todoState.map((todo, i) => (
               <TodoComponent key={todo.todoName + i} todo={todo} index={i} />
             ))
           : null}
-      </Stack>
+      </Stack> */}
       <Fab
         sx={styles.fab}
         color="primary"
